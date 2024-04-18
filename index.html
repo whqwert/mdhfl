@@ -47,13 +47,14 @@
 		<script>
 			let db;
 
-			function checkFormat(value) {
-				return /^std_[a-z0-9]{32}\.mp3$/.test(value);
+			function getHash(value) {
+				return value.match(/(?<=std_)[a-z0-9]{32}(?=\.mp3)/);
 			}
 
 			async function lookup() {
-				const value = document.getElementById('input').value;
-				if (!checkFormat(value)) {
+				const hash = getHash(document.getElementById('input').value);
+
+				if (!hash) {
 					alert('File name is not the correct format.');
 					return;
 				}
@@ -63,7 +64,7 @@
 					db = await response.json();
 				}
 
-				const song = db[value];
+				const song = db[hash];
 
 				if (song) {
 					alert(song);
