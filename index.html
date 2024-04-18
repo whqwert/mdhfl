@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Myspace Dragon Hoard Filename Lookup</title>
+		<style>
+			html {
+				height: 100%;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				font-size: x-large;
+				font-family: sans-serif;
+			}
+
+			body {
+				margin: 0;
+				height: 10%;
+				max-width: 90%;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				flex-wrap: wrap;
+			}
+
+			#input,
+			#button {
+				height: 40%;
+			}
+
+			#input {
+				width: 20rem;
+				margin-right: 2%;
+				text-align: center;
+			}
+
+			#button {
+				width: 5rem;
+			}
+
+			#example {
+				font-style: italic;
+				font-size: x-small;
+			}
+		</style>
+		<script>
+			let db;
+
+			function checkFormat(value) {
+				return /^std_[a-z0-9]{32}\.mp3$/.test(value);
+			}
+
+			async function lookup() {
+				const value = document.getElementById('input').value;
+				if (!checkFormat(value)) {
+					alert('File name is not the correct format.');
+					return;
+				}
+
+				if (db === undefined) {
+					const response = await fetch('./db.json');
+					db = await response.json();
+				}
+
+				const song = db[value];
+
+				if (song) {
+					alert(song);
+				} else {
+					alert('Failed to find song.');
+				}
+			}
+		</script>
+	</head>
+
+	<body>
+		<input id="input" type="text" />
+		<input id="button" type="button" value="Lookup" onclick="lookup()" />
+		<div id="example">example: std_8ce396678d064bbda6fe39ae3b9f6640.mp3</div>
+	</body>
+</html>
