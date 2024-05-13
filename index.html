@@ -49,7 +49,7 @@
 			let db;
 
 			function getHash(value) {
-				return value.match(/(?<=std_)[a-z0-9]{32}(?=\.mp3)/);
+				return value.match(/(?<=std_)[a-z0-9]{10}(?=[a-z0-9]{22}\.mp3)/);
 			}
 
 			async function lookup() {
