@@ -46,10 +46,23 @@
 			}
 		</style>
 		<script>
-			let db;
+			let songs;
 
-			function getHash(value) {
-				return value.match(/(?<=std_)[a-z0-9]{10}(?=[a-z0-9]{22}\.mp3)/);
+			function getHash(input) {
+				return input.match(/(?<=std_)[a-z0-9]{10}(?=[a-z0-9]{22}\.mp3)/);
+			}
+
+			function tabsToJson(text) {
+				let json = {};
+				const chunks = text.split('\t');
+
+				for (let i = 0; i < chunks.length; i += 3) {
+					const chunk = chunks.slice(i, i + 3);
+					// hash, artist, title
+					json[chunk[0]] = `${chunk[1]} - ${chunk[2]}`;
+				}
+
+				return json;
 			}
 
 			async function lookup() {
@@ -60,12 +73,13 @@
 					return;
 				}
 
-				if (db === undefined) {
-					const response = await fetch('./db.json');
-					db = await response.json();
+				if (songs === undefined) {
+					const response = await fetch('./songs.txt');
+					const data = await response.text();
+					songs = tabsToJson(data);
 				}
 
-				const song = db[hash];
+				const song = songs[hash];
 
 				if (song) {
 					alert(song);
