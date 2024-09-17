@@ -74,9 +74,14 @@
 				}
 
 				if (songs === undefined) {
+					const lookupButton = document.getElementById('button');
+					lookupButton.value = 'Loading...';
+
 					const response = await fetch('./songs.txt');
 					const data = await response.text();
 					songs = tabsToJson(data);
+
+					lookupButton.value = 'Lookup';
 				}
 
 				const song = songs[hash];
